@@ -1,0 +1,78 @@
+server:
+  port: 7777
+
+logging:
+  level:
+    org:
+      springframework:
+        cloud:
+          gateway: TRACE
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8888/eureka
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+      routes:
+        - id: route1
+          predicates:
+            - Path=/ms-formation/**
+          filters:
+            - RewritePath=/ms-formation/(?<s>.*), /${s}
+          uri: lb://ms-formation
+
+        - id: route2
+          predicates:
+            - Path=/product-service/**
+          filters:
+            - RewritePath=/product-service/(?<s>.*), /${s}
+          uri: lb://product-service
+
+        - id: route3
+          predicates:
+            - Path=/category-service/**
+          filters:
+            - RewritePath=/category-service/(?<s>.*), /${s}
+          uri: lb://category-service
+
+        - id: route4
+          predicates:
+            - Path=/wishlist-service/**
+          filters:
+            - RewritePath=/wishlist-service/(?<s>.*), /${s}
+          uri: lb://wishlist-service
+
+        - id: user-service-route
+          predicates:
+            - Path=/user-service/**
+          filters:
+            - RewritePath=/user-service/(?<s>.*), /${s}
+          uri: lb://user-service
+
+
+        - id: order-service-route
+          predicates:
+            - Path=/order-service/**
+          filters:
+            - RewritePath=/order-service/(?<s>.*), /${s}
+          uri: lb://order-service
+
+
+        - id: payment-service-route
+          predicates:
+            - Path=/payment-service/**
+          filters:
+            - RewritePath=/payment-service/(?<s>.*), /${s}
+          uri: lb://payment-service

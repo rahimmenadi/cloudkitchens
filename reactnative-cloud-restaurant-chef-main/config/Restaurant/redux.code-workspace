@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"name": "redux",
+			"path": "../../../redux"
+		},
+		{
+			"name": "Food-Recipe-RN-App-Yt-main",
+			"path": "../.."
+		}
+	],
+	"settings": {
+		"CodeGPT.apiKey": "CodeGPT Plus Beta"
+	}
+}

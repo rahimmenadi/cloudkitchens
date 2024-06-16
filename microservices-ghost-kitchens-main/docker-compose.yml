@@ -1,0 +1,121 @@
+version: "3"
+
+services:
+
+  ## Eureka Server
+  discovery-server:
+    image: iliassoltani/discovery-image:latest
+    container_name: discovery-server
+    ports:
+      - "8888:8888"
+
+
+  ## Api Gateway Server
+  api-gateway:
+    image: iliassoltani/api-gateway-image:latest
+    depends_on:
+      - discovery-server
+    container_name: api-gateway
+    ports:
+      - "7777:7777"
+    environment:
+      profile: "default"
+      eureka.client.serviceUrl.defaultZone: "http://discovery-server:8888/eureka"
+
+
+  ## User Service Server
+  user-service:
+    build: /user-service/
+    image: iliassoltani/user-image:latest
+    container_name: user-service
+    depends_on:
+      - discovery-server
+      - api-gateway
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_USER=${DB_USER}
+      - DB_URL=${DB_URL}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - TOKEN_EXPIRES_IN=${TOKEN_EXPIRES_IN}
+      - API_KEY=${API_KEY}
+      - AUTH_DOMAIN=${AUTH_DOMAIN}
+      - PROJECT_ID=${PROJECT_ID}
+      - STORAGE_BUCKET=${STORAGE_BUCKET}
+      - MESSAGING_SENDER_ID=${MESSAGING_SENDER_ID}
+      - APP_ID=${APP_ID}
+      - MEASUREMENT_ID=${MEASUREMENT_ID}
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
+      - HOSTNAME=${HOSTNAME}
+      - EMAIL_HOST=${EMAIL_HOST}
+      - EMAIL_PORT=${EMAIL_PORT}
+      - EMAIL_USER=${EMAIL_USER}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - EUREKA_HOST=${EUREKA_HOST}
+
+
+
+  ## Category Service Server
+  category-service:
+    build: /category-service/
+    image: iliassoltani/category-image:latest
+    container_name: category-service
+    depends_on:
+      - discovery-server
+      - api-gateway
+    environment:
+      profile: "default"
+      eureka.client.serviceUrl.defaultZone: "http://discovery-server:8888/eureka"
+
+  ## Product Service Server
+  product-service:
+    build: /product-service/
+    image: iliassoltani/product-image:latest
+    container_name: product-service
+    depends_on:
+      - discovery-server
+      - api-gateway
+    environment:
+      profile: "default"
+      eureka.client.serviceUrl.defaultZone: "http://discovery-server:8888/eureka"
+
+
+  ## Wishlist Service Server
+  wishlist-service:
+    build: /wishlist-service/
+    image: iliassoltani/wishlist-image:latest
+    container_name: wishlist-service
+    depends_on:
+      - discovery-server
+      - api-gateway
+    environment:
+      profile: "default"
+      eureka.client.serviceUrl.defaultZone: "http://discovery-server:8888/eureka"
+
+
+  ## Order Service Server
+  order-service:
+    build: /order-service/
+    image: iliassoltani/order-image:latest
+    container_name: order-service
+    depends_on:
+      - discovery-server
+      - api-gateway
+    environment:
+      profile: "default"
+      eureka.client.serviceUrl.defaultZone: "http://discovery-server:8888/eureka"
+
+
+  ## Payment Service Server
+  payment-service:
+    build: /payment-service/
+    image: iliassoltani/payment-image:latest
+    container_name: payment-service
+    depends_on:
+      - discovery-server
+      - api-gateway
+    environment:
+      profile: "default"
+      eureka.client.serviceUrl.defaultZone: "http://discovery-server:8888/eureka"
